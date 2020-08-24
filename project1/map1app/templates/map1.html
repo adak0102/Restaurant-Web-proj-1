@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Simple Map</title>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy81EbO46BRSnX1DOgg_F84bhsdbku2z4"></script>
+    <style type="text/css">
+        #map {
+	     height: 600px;
+	     width: 100%;
+        }
+    </style>
+  </head>
+  <body>
+	<h1>LUNCH 4 YOU MAP</h1>
+    {% load static %}
+	<hr>
+	<div id="map" style="width: 800px; height: 600px;"></div>
+	<script>
+    	/*window.onload=function(){
+    	    var dom = document.getElementById("map");
+    	    navigator.geolocation.getCurrentPosition(function(position) {
+    	        var latlng = { lat: position.coords.latitude, lng: position.coords.longitude }
+    	        var map =new google.maps.Map(dom, {
+    	            center: latlng,
+    	            zoom:16
+    	        });
+
+    	        var marker = new google.maps.Marker({position: latlng, map: map});
+
+
+				});
+		  };
+*/
+
+
+    	var dom2 = document.getElementById("map");
+        if (dom2){
+                var current = {lat : 37.5096357, lng :127.0555218}
+                var map = new google.maps.Map(dom2, {
+            	    center: current,
+            	    zoom: 18
+          	    });
+
+                {% for point in pointlist %}
+
+                foodlatlng = {lat : {{point.locate_x}}, lng: {{point.locate_y}} }
+                var myIcon={ url:"/static/{{point.res_type}}.png",
+                            scaledSize: new google.maps.Size(30, 30)
+                            };
+                var marker = new google.maps.Marker({position: foodlatlng, map:map, icon:myIcon} );
+                var contentString = "<h3><img src="/static/{{point.res}}.png" width='12'>{{point.res_name}}</h3>";
+                var infowindow = new google.maps.InfoWindow({
+			        content: contentString
+			    });
+			    marker.addListener('click', makeListener(map, marker, infowindow));
+
+			    {% endfor %}
+            }
+
+            function makeListener(map, marker, infowindow){
+                    return function(){
+                        infowindow.open(map, marker);
+                    };
+                }
+            function makeOutListener(infowindow){
+            return function() {
+            infowindow.close();
+            };
+            }
+    </script>
+</body>
+</html>
+<!-- var myIcon="/static/mark.png"-->
+<!--icon:myICon-->
+
+<!--marker.addListener('mouseout',makeOutListener(infowindow));-->
+<!--var marker = new google.maps.Marker({position: foodlatlng, map:map});-->
+
+
+<!-- var myIcon=new.google.maps.MarkerImage("/images/mark.png",null,null,null,new google.maps.size(12,20)-->
+<!--                marker = new google.maps.Marker({position: foodlatlng, map:map, icon:myICon});-->
+
+<!--var myIcon={ url:"{% static 'mark.png' %}",-->
+<!--                            scaledSize: new google.maps.Size(10, 10)-->
+<!--                            };-->

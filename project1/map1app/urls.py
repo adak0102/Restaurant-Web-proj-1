@@ -1,0 +1,6 @@
+from django.urls import path
+from . import views
+from django.conf.urls.static import static
+urlpatterns = [
+    path("ssmap/", views.ssmap, name="ssmap"),
+]
